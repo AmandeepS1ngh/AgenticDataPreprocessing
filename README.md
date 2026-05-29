@@ -1,4 +1,4 @@
-# 🤖 AI Agent for Data Cleaning and Preprocessing
+# 🤖 AI Agent for Data Cleaning, Visualisation & Business Insights
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.10-blue?style=for-the-badge&logo=python&logoColor=white" alt="Python 3.10">
@@ -6,81 +6,102 @@
   <img src="https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white" alt="Streamlit">
   <img src="https://img.shields.io/badge/Groq-FF6B00?style=for-the-badge&logo=ai&logoColor=white" alt="Groq AI">
   <img src="https://img.shields.io/badge/LangGraph-121212?style=for-the-badge" alt="LangGraph">
+  <img src="https://img.shields.io/badge/FPDF2-E91E63?style=for-the-badge" alt="FPDF2">
 </p>
 
 <p align="center">
-  <strong>An intelligent AI-powered system with graceful fallback that automates data cleaning and preprocessing tasks for machine learning workflows.</strong>
+  <strong>A premium, business-focused data prep suite powered by FastAPI, Streamlit, and Groq AI. It automates data cleaning, generates AI-planned visualisations, drafts strategic consultant-grade insights, and builds print-ready PDF reports with zero layout overlaps.</strong>
 </p>
 
 ---
 
 ## 📖 Overview
 
-This project leverages **Python, FastAPI, Streamlit, and Groq AI (LLaMA 3.3)** with **LangGraph** to streamline data preparation, ensuring clean, consistent, and model-ready datasets. It combines traditional data cleaning techniques with AI-powered intelligent processing, featuring a **resilient fallback mechanism** that guarantees results even when AI services are unavailable.
+This system provides a full-featured workspace to clean, visualize, and generate insights from any raw tabular dataset. Leveraging **FastAPI** for core API services and **Streamlit** for a modern user interface, the tool uses **Groq AI (LLaMA 3.3 / LLaMA 3.1)** and **LangGraph** to perform context-aware data cleaning, select business-relevant charts, and write data-driven recommendations.
+
+A robust **traditional fallback system** is integrated throughout, guaranteeing data cleaning, chart generation, and statistical analysis succeed instantly even in offline or rate-limited environments.
 
 ---
 
 ## ✨ Features
 
-| Feature | Description |
-|---------|-------------|
-| 🤖 **AI-Powered Data Cleaning** | Automatically detects and handles missing values, outliers, and inconsistencies using Groq AI (LLaMA 3.3) |
-| 🛡️ **Graceful Fallback System** | Always returns cleaned data - uses traditional methods if AI quota is exceeded |
-| 🧩 **Automated Preprocessing** | Performs encoding, normalization (optional), and scaling operations efficiently |
-| 🗄️ **Database Integration** | Ingests raw data directly from **PostgreSQL** and **MySQL** databases |
-| 🌐 **API Data Fetching** | Fetch and clean data from external REST APIs |
-| 📁 **File Upload Support** | Upload and process CSV and Excel files |
-| ⚙️ **RESTful API Backend** | Real-time endpoints via **FastAPI** for seamless integration with ML pipelines |
-| 🧠 **AI Agent with LangGraph** | Uses **LangGraph StateGraph** for intelligent workflow orchestration |
-| 📈 **AI-Driven Visualisations** | Plans and generates 5-7 business-relevant interactive Plotly charts using AI-inferred metadata |
-| 🧠 **Strategic Insights Agent** | Multi-node LangGraph pipeline providing strategic business intelligence and recommendations |
-| 📄 **Premium PDF Reporting** | Generates multi-page summary PDF reports with custom headers, footers (page numbers), and embedded charts |
-| 🖥️ **Modern Web UI** | Beautiful **Streamlit** interface with status indicators, interactive chart filters, and report downloads |
-| 📊 **Smart Status Labels** | Clear indicators showing whether AI or traditional cleaning was used |
+| Category | Feature | Description |
+|----------|---------|-------------|
+| 📤 **Data Ingestion** | **Multi-Source Loading** | Process CSV/Excel files, ingest queries directly from **PostgreSQL/MySQL**, or pull raw JSON from REST APIs. |
+| 🧹 **Data Cleaning** | **AI-Enhanced Imputation** | Groq AI standardizes texts, identifies anomalies, and fills missing values contextually. |
+| | **Robust Fallbacks** | Traditional pipelines always execute first; if the AI quota is exceeded, clean data is still returned. |
+| | **Optional Normalisation** | Scaler is toggleable in the UI, keeping original data ranges visible for business reporting. |
+| 📈 **Visualisations** | **AI Chart Planner** | Groq AI scans dataset metadata and plans 5 to 7 high-value business charts (e.g., product segment sales, seasonality trends). |
+| | **Plotly Dashboard** | Interactive Univariate & Bivariate Plotly charts styled with custom color palettes and text wrapping. |
+| | **Embedded Business Value** | Explanations underneath each chart clarify *what the chart shows* and *why it matters* to stakeholders. |
+| 🤖 **Strategic Insights** | **LangGraph Business Consultant** | Multi-node agent computes descriptive stats, outliers, and Pearson correlations, drafting detailed recommendations (e.g., season-based stocking advice). |
+| 📥 **Export & Reports** | **Premium PDF Reports** | Generates multi-page summary reports with custom headers, footers (page numbers), pre-cached visual charts, and AI value writeups. |
+| | **Format Outputs** | Download cleaned datasets in CSV, Excel, or JSON format, and export all interactive charts as an HTML ZIP. |
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ System Architecture
 
+The following diagram illustrates how raw datasets flow from the Streamlit UI to the FastAPI backend, how the AI models plan visualisations, and how the LangGraph pipeline extracts business insights:
+
+```mermaid
+flowchart TD
+    subgraph Streamlit Frontend [Streamlit UI]
+        Upload[📤 Upload CSV/Excel / Ingest DB / Call API]
+        Table[🧹 Preprocessing Tab: Setup Strategy & Clean]
+        Dashboard[📊 Visualisations Tab: Interactive Plotly Charts]
+        InsightsUI[🤖 AI Insights Tab: Recommendations & Outliers]
+        Export[📥 Export Tab: Download CSV/Excel/JSON / ZIP / PDF]
+    end
+
+    subgraph FastAPI Backend [FastAPI Server: Port 8000]
+        CleanEP["/cleandata/"]
+        VizEP["/visualize/?include_png=true"]
+        InsightsEP["/generate-insights/"]
+    end
+
+    subgraph AIServices [Groq AI Services]
+        LLM[LLaMA-3.1-8B / LLaMA-3.3-70B]
+    end
+
+    subgraph Engine [Core Engines]
+        Cleaner[Traditional Cleaner: Data cleaning, Type fixes, Optional scaling]
+        VizPlanner[AI Visualization Planner: Plans chart types, x/y columns, colors]
+        LangGraphAgent[LangGraph Insights Agent: 4-Node pipeline]
+    end
+
+    %% Ingestion to Cleaning
+    Upload -->|Raw Data| CleanEP
+    CleanEP --> Cleaner
+    Cleaner -->|Clean Data| Table
+
+    %% Visualize flow
+    Table -->|Triggers Visualisation| VizEP
+    VizEP --> VizPlanner
+    VizPlanner -->|Extracts Metadata| LLM
+    LLM -->|Returns JSON Plan| VizPlanner
+    VizPlanner -->|Renders Plotly HTML & PNGs via Kaleido| Dashboard
+
+    %% Insights flow
+    Dashboard -->|Passes Clean Data & Charts Metadata| InsightsEP
+    InsightsEP --> LangGraphAgent
+    
+    %% Export flow
+    InsightsUI -->|Strategic Text| Export
+    Export -->|Compiles PDF using FPDF2 Subclass| Export
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                        STREAMLIT UI                              │
-│   (Upload CSV/Excel │ Database Query │ External API)            │
-│   • Status Labels (AI ✅ / Traditional ⚠️)                      │
-│   • Download Button 📥                                           │
-└────────────────────────────┬────────────────────────────────────┘
-                             │
-                             ▼
-┌─────────────────────────────────────────────────────────────────┐
-│                     FASTAPI BACKEND                              │
-│     Endpoints: /cleandata/ │ /clean-db/ │ /clean-api/           │
-└────────────────────────────┬────────────────────────────────────┘
-                             │
-              ┌──────────────┴──────────────┐
-              ▼                              ▼
-┌─────────────────────────┐    ┌─────────────────────────────────┐
-│    DATA CLEANING        │    │         AI AGENT                 │
-│  (Traditional Methods)  │ →  │  (Groq AI + LangGraph)           │
-│  ✅ ALWAYS WORKS        │    │  ❓ MAY FAIL (quota/rate limit) │
-│  • Handle missing vals  │    │  • Intelligent imputation        │
-│  • Remove duplicates    │    │  • Anomaly detection             │
-│  • Min-Max normalize    │    │  • Context-aware formatting      │
-│  • Fix data types       │    │  • Returns cleaned JSON          │
-└─────────────────────────┘    └──────────────┬──────────────────┘
-              │                               │
-              │         ┌─────────────────────┘
-              │         │ AI Success?
-              │         ├─── YES → Use AI result
-              │         └─── NO  → Use Traditional result
-              │                               │
-              └───────────────┬───────────────┘
-                              ▼
-              ┌─────────────────────────────────────┐
-              │      CLEANED DATA (JSON)            │
-              │   • cleaned_data: [...]             │
-              │   • ai_enhanced: true/false         │
-              │   • message: status description     │
-              └─────────────────────────────────────┘
+
+### 🧠 LangGraph Insights Pipeline
+
+The insights agent uses a LangGraph `StateGraph` to orchestrate analysis step-by-step, ensuring structural checks execute before LLM advice:
+
+```mermaid
+stateDiagram-v2
+    [*] --> analyze_statistics : Ingest Clean Dataset
+    analyze_statistics --> detect_patterns : Calculate Descriptive Stats, Skewness, Kurtosis
+    detect_patterns --> generate_insights : Check Outliers (IQR) & Pearson Correlations (r >= 0.3)
+    generate_insights --> provide_recommendations : Invoke Groq AI (pass Stats + Correlations + Visual Charts Context)
+    provide_recommendations --> [*] : Compile Strategic Insights & Actionable Stocking Advice
 ```
 
 ---
@@ -88,43 +109,40 @@ This project leverages **Python, FastAPI, Streamlit, and Groq AI (LLaMA 3.3)** w
 ## 📁 Project Structure
 
 ```
-Ai_Agent_for_Data_Cleaning_and_Preprocessing/
+AgenticDataPreprocessing/
 │
-├── 📄 .env                      # Environment variables (API keys, DB config)
-├── 📄 README.md                 # Project documentation
-├── 📄 requirement.txt           # Python dependencies
+├── 📄 .env                         # API Keys (Groq) and Database Configurations
+├── 📄 README.md                    # Core project documentation
+├── 📄 requirement.txt              # Pip requirements
+├── 📄 test_generated_report.pdf    # Sample PDF output report
 │
 ├── 📂 app/
-│   └── 📄 app.py                # Streamlit frontend application
+│   └── 📄 app.py                   # Streamlit frontend & PDF compiler
 │
 ├── 📂 data/
-│   ├── 📄 sample_data.csv       # Sample CSV dataset
-│   └── 📄 sample_data.xlsx      # Sample Excel dataset
+│   └── 📄 sales_data_sample.csv    # Sample sales dataset for local testing
 │
 └── 📂 Scripts/
-    ├── 📄 ai_agent.py           # AI Agent with LangGraph & Groq
-    ├── 📄 backend.py            # FastAPI backend server
-    ├── 📄 data_cleaning.py      # Traditional data cleaning methods
-    ├── 📄 data_visualization.py # AI-planned interactive visualizations
-    ├── 📄 insights_agent.py     # LangGraph Business Insights Agent
-    ├── 📄 data_ingestion.py     # Data loading utilities
-    ├── 📄 main.py               # Main entry point
-    ├── 📄 test_mysql_connection.py    # MySQL connection test
-    └── 📄 test_postgre_connection.py  # PostgreSQL connection test
+    ├── 📄 backend.py               # FastAPI backend server & API routes
+    ├── 📄 ai_agent.py              # LangGraph AI data cleaning agent
+    ├── 📄 data_cleaning.py         # Traditional pandas data cleaning machine
+    ├── 📄 data_visualization.py    # AI chart planner & Plotly visualisations
+    ├── 📄 insights_agent.py        # LangGraph Business Insights Agent
+    ├── 📄 data_ingestion.py        # Database & API connectors
+    └── 📄 main.py                  # CLI/Main execution entry point
 ```
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Category | Technology |
-|----------|------------|
-| **Frontend** | Streamlit |
-| **Backend** | FastAPI, Uvicorn |
-| **AI/ML** | Groq AI (LLaMA 3.3), LangGraph |
-| **Data Processing** | Pandas, NumPy, Scikit-learn |
-| **Database** | PostgreSQL, MySQL (via SQLAlchemy) |
-| **HTTP Client** | Requests, AIOHTTP |
+- **Frontend:** Streamlit, Plotly Express
+- **Backend:** FastAPI, Uvicorn, Python-Multipart
+- **AI Orchestration:** LangGraph, Groq SDK, python-dotenv
+- **Data Engineering:** Pandas, NumPy, Scikit-learn, Openpyxl, Xlsxwriter
+- **Database Connectors:** SQLAlchemy, PyMySQL, Psycopg2-binary
+- **PDF Engine:** FPDF2
+- **Chart Renderer:** Kaleido (headless static image export)
 
 ---
 
@@ -132,380 +150,100 @@ Ai_Agent_for_Data_Cleaning_and_Preprocessing/
 
 ### Prerequisites
 
-#### Python Version Requirements
-
-**✅ Recommended: Python 3.10**
-
-This project is fully tested and optimized for **Python 3.10**. Here's the compatibility breakdown:
-
-| Python Version | Status | Notes |
-|----------------|--------|-------|
-| **3.10.x** | ✅ **Fully Supported** | Recommended version - all packages compatible |
-| **3.11.x** | ✅ Supported | Most features work, some packages may need updates |
-| **3.12.x** | ⚠️ Limited Support | Some dependencies may not be fully compatible |
-| **3.13.x** | ❌ Not Supported | Several packages incompatible (scipy, ipython) |
-| **3.9.x** | ⚠️ Limited Support | Some newer features may not work |
-
-**Why Python 3.10?**
-- All AI/ML libraries (LangGraph, Google Gemini, scipy, scikit-learn) are fully compatible
-- Best balance between modern features and package compatibility
-- Stable and widely used in production environments
-
-#### Other Requirements
-
-- **Groq API Key** (Required for AI features - free tier available)
-- **PostgreSQL or MySQL** (Optional, only needed for database features)
-- **Git** (for cloning the repository)
-
----
+* **Python 3.10.x** (Highly recommended for package compatibility with Scipy and LangGraph).
+* **Groq API Key** (Create a free key at the [Groq Console](https://console.groq.com/)).
 
 ### Installation
 
-#### Step 1: Clone the Repository
-```bash
-git clone https://github.com/yourusername/Agentic-Data-Prep.git
-cd "Agentic Data Prep"
-```
+1. **Clone the Repository:**
+   ```bash
+   git clone https://github.com/AmandeepS1ngh/AgenticDataPreprocessing.git
+   cd AgenticDataPreprocessing
+   ```
 
-#### Step 2: Create Virtual Environment with Python 3.10
+2. **Set up Virtual Environment:**
+   ```bash
+   python3.10 -m venv venv
+   source venv/bin/activate
+   ```
 
-**On macOS/Linux:**
-```bash
-# Using python3.10 specifically
-python3.10 -m venv .venv
-source .venv/bin/activate
-```
+3. **Install Dependencies:**
+   ```bash
+   pip install --upgrade pip
+   pip install -r requirement.txt
+   ```
 
-**On Windows:**
-```cmd
-# Using python3.10 specifically
-python3.10 -m venv .venv
-.venv\Scripts\activate
-```
+4. **Configure Environment Variables:**
+   Create a `.env` file in the project root:
+   ```env
+   # Required: Groq API Configuration
+   GROQ_API_KEY=your_groq_api_key_here
+   GROQ_MODEL=llama-3.1-8b-instant
 
-**Alternative: Using conda**
-```bash
-conda create -n dataprep python=3.10
-conda activate dataprep
-```
-
-#### Step 3: Install Dependencies
-```bash
-pip install --upgrade pip
-pip install -r requirement.txt
-```
-
-**Note:** If you encounter any issues during installation, try:
-```bash
-# Install packages one category at a time
-pip install fastapi uvicorn starlette python-multipart
-pip install pandas numpy openpyxl
-pip install google-generativeai langgraph
-pip install streamlit
-pip install python-dotenv
-```
-
-#### Step 4: Configure Environment Variables
-
-Create a `.env` file in the root directory:
-
-```env
-# Required: Groq API Key
-GROQ_API_KEY=your_groq_api_key_here
-
-# Optional: MySQL Configuration (only if using database features)
-MYSQL_HOST=127.0.0.1
-MYSQL_PORT=3306
-MYSQL_USER=root
-MYSQL_PASSWORD=your_password
-MYSQL_DATABASE=your_database
-
-# Optional: PostgreSQL Configuration
-POSTGRES_HOST=127.0.0.1
-POSTGRES_PORT=5432
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=your_password
-POSTGRES_DATABASE=your_database
-```
-
-**Get your Groq API Key:**
-1. Visit [Groq Console](https://console.groq.com/)
-2. Sign up or log in with your account
-3. Navigate to API Keys section
-4. Click "Create API Key"
-5. Copy the key and paste it in your `.env` file
-
-**Why Groq?**
-- ⚡ **Ultra-fast inference** - 10x faster than traditional cloud AI
-- 🆓 **Generous free tier** - No credit card required
-- 🧠 **LLaMA 3.3 70B** - State-of-the-art open-source model
-- 🛡️ **Reliable** - Built-in rate limiting and error handling
+   # Optional: Database configurations
+   MYSQL_HOST=127.0.0.1
+   MYSQL_PORT=3306
+   MYSQL_USER=root
+   MYSQL_PASSWORD=your_password
+   MYSQL_DATABASE=your_database
+   ```
 
 ---
 
-### Running the Application
+## 🏃 Running the Application
 
-#### Option 1: Using Two Terminals (Recommended)
+For a fully interactive experience, start both the FastAPI server and the Streamlit frontend.
 
-**Terminal 1 - Start FastAPI Backend:**
+**1. Launch FastAPI Backend:**
 ```bash
-# Make sure you're in the project root directory
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+source venv/bin/activate
 uvicorn Scripts.backend:app --host 127.0.0.1 --port 8000 --reload
 ```
 
-**Terminal 2 - Start Streamlit Frontend:**
+**2. Launch Streamlit UI:**
 ```bash
-# In a new terminal window
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+source venv/bin/activate
 streamlit run app/app.py
 ```
 
-#### Option 2: Using Background Process
-
-```bash
-# Start backend in background
-source .venv/bin/activate
-uvicorn Scripts.backend:app --host 127.0.0.1 --port 8000 --reload &
-
-# Start frontend
-streamlit run app/app.py
-```
-
-#### Option 3: Quick Start Script
-
-Create a `start.sh` file (macOS/Linux):
-```bash
-#!/bin/bash
-source .venv/bin/activate
-uvicorn Scripts.backend:app --host 127.0.0.1 --port 8000 --reload &
-streamlit run app/app.py
-```
-
-Make it executable and run:
-```bash
-chmod +x start.sh
-./start.sh
-```
-
-#### Access the Application
-
-Once both servers are running:
-- **Streamlit Frontend:** [http://localhost:8501](http://localhost:8501)
-- **FastAPI Backend:** [http://127.0.0.1:8000](http://127.0.0.1:8000)
-- **API Documentation:** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
-- **Alternative API Docs:** [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc)
+Open your browser at [http://localhost:8501](http://localhost:8501) to interact with the system. Access API docs at [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs).
 
 ---
 
-### Troubleshooting Installation
+## 📡 Backend API Reference
 
-<details>
-<summary><strong>❌ "ModuleNotFoundError: No module named 'dotenv'"</strong></summary>
+### 1. Clean File Upload
+* **Endpoint:** `POST /cleandata/`
+* **Content-Type:** `multipart/form-data`
+* **Form Parameters:**
+  - `file`: CSV or Excel file binary
+  - `normalize`: `true` or `false` (default: `false`)
+  - `strategy`: `mean`, `median`, or `mode` (imputation method)
 
-**Solution:**
-```bash
-pip install python-dotenv
-```
-</details>
+### 2. Generate Visualisations
+* **Endpoint:** `POST /visualize/`
+* **Query Parameters:**
+  - `include_png`: `true` or `false` (set to `true` to return Base64 PNGs for PDFs)
+* **Form Parameters:**
+  - `cleaned_data`: Serialized JSON string of cleaned records
 
-<details>
-<summary><strong>❌ "No module named 'langgraph'"</strong></summary>
-
-**Solution:**
-```bash
-pip install langgraph google-generativeai
-```
-</details>
-
-<details>
-<summary><strong>❌ "Could not find a version that satisfies the requirement scipy==1.16.2"</strong></summary>
-
-**Solution:** This means you're using Python 3.13. Use Python 3.10 instead:
-```bash
-# Recreate virtual environment with Python 3.10
-rm -rf .venv
-python3.10 -m venv .venv
-source .venv/bin/activate
-pip install -r requirement.txt
-```
-</details>
-
-<details>
-<summary><strong>❌ "Connection refused" when uploading files in Streamlit</strong></summary>
-
-**Solution:** Make sure the FastAPI backend is running:
-```bash
-# In a separate terminal
-uvicorn Scripts.backend:app --host 127.0.0.1 --port 8000 --reload
-```
-</details>
-
-<details>
-<summary><strong>❌ "GEMINI_API_KEY is missing"</strong></summary>
-
-**Solution:** Create or update your `.env` file with a valid API key:
-```env
-GEMINI_API_KEY=your_actual_api_key_here
-```
-</details>
+### 3. Generate Strategic Insights
+* **Endpoint:** `POST /generate-insights/`
+* **Content-Type:** `application/json`
+* **JSON Body:**
+  ```json
+  {
+    "cleaned_data": [{"col1": "val", "col2": 123}],
+    "visualization_results": { "charts": [...] }
+  }
+  ```
 
 ---
 
-## 📡 API Endpoints
+## 📄 PDF Report Mechanics
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/cleandata/` | Upload and clean CSV/Excel files |
-| `POST` | `/clean-db/` | Fetch and clean data from database |
-| `POST` | `/clean-api/` | Fetch and clean data from external API |
-
-### Example: Clean a CSV file
-
-```bash
-curl -X POST "http://localhost:8000/cleandata/" \
-  -H "Content-Type: multipart/form-data" \
-  -F "file=@data/sample_data.csv"
-```
-
-### Example: Clean data from database
-
-```bash
-curl -X POST "http://localhost:8000/clean-db/" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "db_url": "postgresql://user:password@localhost:5432/mydb",
-    "query": "SELECT * FROM my_table"
-  }'
-```
-
----
-
-## 🧹 Data Cleaning Operations
-
-### Traditional Cleaning (`data_cleaning.py`) - ✅ Always Runs
-- ✅ Handle missing values (mean, median, mode, drop)
-- ✅ Remove duplicate rows
-- ✅ Fix and convert data types
-- ✅ **Min-Max normalization** (scales values 0-1)
-
-### AI-Powered Cleaning (`ai_agent.py`) - ❓ Optional Enhancement
-- 🤖 Intelligent missing value imputation
-- 🤖 Context-aware data formatting
-- 🤖 Anomaly detection and handling
-- 🤖 Text standardization
-
-### 🛡️ Graceful Fallback System
-
-The system **always returns cleaned data**, even if AI fails:
-
-| Scenario | Result |
-|----------|--------|
-| AI Success | Traditional cleaning + AI enhancement |
-| AI Quota Exceeded | Traditional cleaning only |
-| AI Rate Limited | Traditional cleaning only |
-| AI Service Down | Traditional cleaning only |
-
-**Response Format:**
-```json
-{
-  "cleaned_data": [...],
-  "ai_enhanced": true/false,
-  "message": "Data cleaned successfully with AI enhancement"
-}
-```
-
----
-
-## 📊 AI Visualisations & Premium PDF Reports
-
-### 📈 AI-Driven Visualisations (`data_visualization.py`)
-- **Dynamic Chart Selection:** Extracts dataset metadata and uses Groq LLM (`llama-3.1-8b-instant`) to identify the top 5 to 7 most critical business questions (e.g., sales trends, seasonal fluctuations, product line breakdowns).
-- **Interactive Plotly Visuals:** Generates univariate and bivariate charts dynamically (bar charts, line charts, scatter plots, heatmaps, box plots) using customized margins, cohesive colors, and interactive browser filters.
-- **Embedded Explanations:** The LLM injects a business description underneath each chart detailing what the chart shows and why it is valuable.
-
-### 🧠 Strategic Insights Agent (`insights_agent.py`)
-- **Multi-Node LangGraph Pipeline:** Orchestrates descriptive statistics calculation, Pearson correlation checks, outlier detection, and LLM strategic advice in a resilient graph architecture.
-- **Visual Chart Integration:** Feeds visual chart descriptions directly into the insights LLM, enabling it to write cohesive, highly specific suggestions referencing the charts visible in the app.
-
-### 📄 Premium PDF Reporting (`app.py`)
-- **Instant Caching:** Visual charts (PNG base64 arrays) are pre-rendered and cached in session state when visualisations are loaded, allowing instantaneous PDF compiles.
-- **Subclassed FPDF2 Layout:** Uses a professional document structure with custom headers (with running lines) and automatic page numbering in footers.
-- **Dynamic Content Spacing:** Anchors chart images dynamically in the document and outputs their business value explanations below them without visual overlaps.
-- **Unicode Safety:** Cleans text inputs automatically to convert Unicode characters (smart quotes, dashes, bullets) to Helvetica-supported text, preventing PDF generation crashes.
-
----
-
-## 🖼️ Screenshots
-
-### Data Source Selection
-The application supports three data input methods:
-- 📁 Upload CSV/Excel files
-- 🗄️ Query databases directly
-- 🌐 Fetch from external APIs
-
-### Cleaned Data Output
-View the cleaned data in a beautiful, interactive table format with the ability to download the results.
-
----
-
-## 🔧 Configuration
-
-### Environment Variables
-
-| Variable | Description | Required |
-|----------|-------------|----------|
-| `GROQ_API_KEY` | Groq AI API key for LLaMA 3.3 | ✅ Yes |
-| `MYSQL_HOST` | MySQL database host | ❌ Optional |
-| `MYSQL_PORT` | MySQL database port | ❌ Optional |
-| `MYSQL_USER` | MySQL username | ❌ Optional |
-| `MYSQL_PASSWORD` | MySQL password | ❌ Optional |
-| `MYSQL_DATABASE` | MySQL database name | ❌ Optional |
-
----
-
-## 🧪 Testing
-
-### Test Database Connections
-
-```bash
-# Test MySQL connection
-python Scripts/test_mysql_connection.py
-
-# Test PostgreSQL connection
-python Scripts/test_postgre_connection.py
-```
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
----
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 🙏 Acknowledgments
-
-- [Groq](https://groq.com/) for blazing-fast AI inference
-- [Meta AI](https://ai.meta.com/) for the LLaMA 3.3 model
-- [LangGraph](https://github.com/langchain-ai/langgraph) for AI workflow orchestration
-- [FastAPI](https://fastapi.tiangolo.com/) for the amazing web framework
-- [Streamlit](https://streamlit.io/) for the beautiful UI components
-
----
-
-<p align="center">
-  Made with ❤️ for the Data Science Community
-</p>  
+The premium PDF report generator is engineered for zero-maintenance stability:
+- **Pre-generated Caching:** Streamlit requests static PNGs when the visualisations are first loaded. When clicking **Generate PDF**, the report prints instantly with no headless browser lag.
+- **Subclass Headers/Footers:** A custom `ReportPDF(FPDF)` handles margins, drawing elegant separation lines on page headers and injecting page numbers dynamically.
+- **Dynamic Image Sizing:** Automatically positions Plotly charts at `pdf.get_y()` coordinates and pushes content downward by `110mm`, avoiding overlapping text.
+- **Character Cleaning:** The PDF engine overrides standard text output, filtering strings through an encoder that converts smart quotes (`’`, `“`), em-dashes (`—`), and bullets (`•`) to Latin-1 compatible signs, completely preventing runtime encoding crashes.
