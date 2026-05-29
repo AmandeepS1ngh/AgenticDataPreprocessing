@@ -26,13 +26,16 @@ This project leverages **Python, FastAPI, Streamlit, and Groq AI (LLaMA 3.3)** w
 |---------|-------------|
 | 🤖 **AI-Powered Data Cleaning** | Automatically detects and handles missing values, outliers, and inconsistencies using Groq AI (LLaMA 3.3) |
 | 🛡️ **Graceful Fallback System** | Always returns cleaned data - uses traditional methods if AI quota is exceeded |
-| 🧩 **Automated Preprocessing** | Performs encoding, normalization, and scaling operations efficiently |
+| 🧩 **Automated Preprocessing** | Performs encoding, normalization (optional), and scaling operations efficiently |
 | 🗄️ **Database Integration** | Ingests raw data directly from **PostgreSQL** and **MySQL** databases |
 | 🌐 **API Data Fetching** | Fetch and clean data from external REST APIs |
 | 📁 **File Upload Support** | Upload and process CSV and Excel files |
 | ⚙️ **RESTful API Backend** | Real-time endpoints via **FastAPI** for seamless integration with ML pipelines |
 | 🧠 **AI Agent with LangGraph** | Uses **LangGraph StateGraph** for intelligent workflow orchestration |
-| 🖥️ **Modern Web UI** | Beautiful **Streamlit** interface with status indicators and CSV download |
+| 📈 **AI-Driven Visualisations** | Plans and generates 5-7 business-relevant interactive Plotly charts using AI-inferred metadata |
+| 🧠 **Strategic Insights Agent** | Multi-node LangGraph pipeline providing strategic business intelligence and recommendations |
+| 📄 **Premium PDF Reporting** | Generates multi-page summary PDF reports with custom headers, footers (page numbers), and embedded charts |
+| 🖥️ **Modern Web UI** | Beautiful **Streamlit** interface with status indicators, interactive chart filters, and report downloads |
 | 📊 **Smart Status Labels** | Clear indicators showing whether AI or traditional cleaning was used |
 
 ---
@@ -99,9 +102,11 @@ Ai_Agent_for_Data_Cleaning_and_Preprocessing/
 │   └── 📄 sample_data.xlsx      # Sample Excel dataset
 │
 └── 📂 Scripts/
-    ├── 📄 ai_agent.py           # AI Agent with Gemini & LangGraph
+    ├── 📄 ai_agent.py           # AI Agent with LangGraph & Groq
     ├── 📄 backend.py            # FastAPI backend server
     ├── 📄 data_cleaning.py      # Traditional data cleaning methods
+    ├── 📄 data_visualization.py # AI-planned interactive visualizations
+    ├── 📄 insights_agent.py     # LangGraph Business Insights Agent
     ├── 📄 data_ingestion.py     # Data loading utilities
     ├── 📄 main.py               # Main entry point
     ├── 📄 test_mysql_connection.py    # MySQL connection test
@@ -409,6 +414,25 @@ The system **always returns cleaned data**, even if AI fails:
   "message": "Data cleaned successfully with AI enhancement"
 }
 ```
+
+---
+
+## 📊 AI Visualisations & Premium PDF Reports
+
+### 📈 AI-Driven Visualisations (`data_visualization.py`)
+- **Dynamic Chart Selection:** Extracts dataset metadata and uses Groq LLM (`llama-3.1-8b-instant`) to identify the top 5 to 7 most critical business questions (e.g., sales trends, seasonal fluctuations, product line breakdowns).
+- **Interactive Plotly Visuals:** Generates univariate and bivariate charts dynamically (bar charts, line charts, scatter plots, heatmaps, box plots) using customized margins, cohesive colors, and interactive browser filters.
+- **Embedded Explanations:** The LLM injects a business description underneath each chart detailing what the chart shows and why it is valuable.
+
+### 🧠 Strategic Insights Agent (`insights_agent.py`)
+- **Multi-Node LangGraph Pipeline:** Orchestrates descriptive statistics calculation, Pearson correlation checks, outlier detection, and LLM strategic advice in a resilient graph architecture.
+- **Visual Chart Integration:** Feeds visual chart descriptions directly into the insights LLM, enabling it to write cohesive, highly specific suggestions referencing the charts visible in the app.
+
+### 📄 Premium PDF Reporting (`app.py`)
+- **Instant Caching:** Visual charts (PNG base64 arrays) are pre-rendered and cached in session state when visualisations are loaded, allowing instantaneous PDF compiles.
+- **Subclassed FPDF2 Layout:** Uses a professional document structure with custom headers (with running lines) and automatic page numbering in footers.
+- **Dynamic Content Spacing:** Anchors chart images dynamically in the document and outputs their business value explanations below them without visual overlaps.
+- **Unicode Safety:** Cleans text inputs automatically to convert Unicode characters (smart quotes, dashes, bullets) to Helvetica-supported text, preventing PDF generation crashes.
 
 ---
 
